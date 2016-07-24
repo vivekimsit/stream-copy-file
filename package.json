@@ -1,0 +1,33 @@
+{
+  "name": "stream-copy-paste",
+  "version": "1.0.0",
+  "description": "Some description",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vivekimsit/stream-copy-paste.git"
+  },
+  "author": {
+    "name": "Vivek Poddar",
+    "email": "vivekimsit@gmail.com",
+    "url": "vivekpoddar.com"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "path",
+    "exists",
+    "exist",
+    "file",
+    "filepath",
+    "fs",
+    "filesystem",
+    "file-system",
+    "access",
+    "stat"
+  ]
+}
