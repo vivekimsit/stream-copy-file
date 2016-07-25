@@ -4,8 +4,8 @@
 
 - [x] Design API (expose Stream or Promise like API?).
       Decided to follow node convention like [WriteFile](https://nodejs.org/api/fs.html#fs_fs_writefile_file_data_options_callback)
-- [ ] Write tests (TDD).
-- [ ] Copy empty src file to dest file.
+- [x] Write tests (TDD).
+- [x] Copy empty src file to dest file.
 - [ ] Handle invalid source and dest dir.
 - [ ] Copy text file to dest file.
 - [ ] Handle errors.
