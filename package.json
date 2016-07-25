@@ -29,5 +29,8 @@
     "file-system",
     "access",
     "stat"
-  ]
+  ],
+  "devDependencies": {
+    "moch": "0.0.1"
+  }
 }

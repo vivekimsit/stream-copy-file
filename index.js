@@ -7,13 +7,10 @@ function copyFile(src, dest, cb) {
   let readStream  = fs.createReadStream(src);
   let writeStream = fs.createWriteStream(dest);
 
-  readStream.pipe(writeStream);
+  readStream.pipe(writeStream)
+            .on('error', (err) => {
+              cb.call(this, err);
+            });
 
-  readStream.on('error', (err) => {
-    cb.call(null, err);
-  });
-
-  writeStream.on('error', (err) => {
-    cb.call(null, err);
-  });
+  cb.call(this, null)
 }

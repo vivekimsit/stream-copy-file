@@ -2,7 +2,7 @@
 const path = require('path');
 const streamCopyFile = require('../');
 
-let inp = path.join(__dirname, 'foo.txt');
+let inp = path.join(__dirname, 'in.txt');
 let out = path.join(__dirname, 'out.txt');
 
 streamCopyFile(inp, out, (err) => {
