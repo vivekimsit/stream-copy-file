@@ -2,36 +2,86 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const streamCopyFile = require('.');
+const streamCopyFile = require('./');
 
-const noop = function() {};
-
-function from(src) {
-  return path.join('/tmp', src);
+const ErrorCode = {
+  FILE_NOT_EXISTS: 'ENOENT'
 }
 
-function to(dest) {
-  return path.join('/tmp', dest);
+function noop() {}
+
+function src(p) {
+  return path.join('/tmp', p);
 }
 
-function equalSync(src, dest) {
+function dest(p) {
+  return path.join('/tmp', p);
+}
+
+function equalSync(path, actual) {
   // Without encoding node returns instances of Buffer.
-  //let srcContent  = fs.readFileSync(from(src), 'utf8');
-  let destContent = fs.readFileSync(from(dest), 'utf8');
-  assert.equal(destContent, '');
+  let destContent = fs.readFileSync(src(path), 'utf8');
+  assert.equal(destContent, actual);
 }
 
-beforeEach(function createFile() {
-  fs.writeFileSync(from('in.txt'), '');
+function createFile(path, content) {
+  fs.writeFileSync(src(path), content);
+}
+
+afterEach(function deleteFiles() {
+  try {
+    fs.unlinkSync(src('in.txt'));
+    fs.unlinkSync(src('out.txt'));
+  } catch (err) {
+    // failed copy doesn't create the file
+    // hence passing it silently.
+  }
 });
 
 describe('Copy', function() {
+
+  it('should raise error for non-exitent src', function(done) {
+    streamCopyFile(src('meow.txt'), dest('out.txt'),
+      function(err) {
+        assert.strictEqual(err.code, ErrorCode.FILE_NOT_EXISTS);
+        done();
+      });
+  });
+
+  it('should raise error for invalid src type', function(done) {
+    streamCopyFile(noop, dest('out.txt'),
+      function(err) {
+        assert.strictEqual(err.name, 'TypeError');
+        done();
+      });
+  });
+
+  it('should raise error for invalid dest type', function(done) {
+    streamCopyFile(noop, noop,
+      function(err) {
+        assert.strictEqual(err.name, 'TypeError');
+        done();
+      });
+  });
+
   it('should copy empty file', function(done) {
-    let src  = 'in.txt';
-    let dest = 'out.txt';
-    streamCopyFile(from(src), to(src), function(err) {
+    let srcPath  = 'in.txt';
+    let destPath = 'out.txt';
+    createFile(srcPath, '');
+    streamCopyFile(src(srcPath), dest(destPath), function(err) {
       if (err) throw err;
-      equalSync(src, dest);
+      equalSync(destPath, '');
+      done();
+    });
+  });
+
+  it('should copy file with texts', function(done) {
+    let srcPath  = 'in.txt';
+    let destPath = 'out.txt';
+    createFile(srcPath, 'bazingaaa');
+    streamCopyFile(src(srcPath), dest(destPath), function(err) {
+      if (err) throw err;
+      equalSync(destPath, 'bazingaaa');
       done();
     });
   });
